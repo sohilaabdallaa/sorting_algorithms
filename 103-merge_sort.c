@@ -1,71 +1,64 @@
 #include "sort.h"
-
-#include <malloc.h>
+#include <stdlib.h>
 
 /**
- * merge - utility function to merge the divided arrays
- * @arr: array
- * @l: left
- * @r: right
- */
-
-void merge (int arr[], int l, int r)
+ * merge - merges two sorted subarrays into one array
+ * @array: array
+ * @left: left subarray
+ * @left_size: size of left subarray
+ * @right: right subarray
+ * @right_size: size of right subarray
+ **/
+void merge(int *array, int *left,
+	       size_t left_size, int *right, size_t right_size)
 {
-    int mid, i, j, k, c;
-    int *temp;
+	int *merged;
+	size_t i, j, k;
 
-    mid = (l + r) / 2;
-    temp = (int *) malloc(sizeof(int) * (r - l + 1));
-    i = l, j = mid + 1, k = 0;
-    while (i <= mid && j <= r)
-    {
-        if (arr[i] < arr[j])
-        {
-            temp[k++] = arr[i++];
-        }
-        else
-        {
-            temp[k++] = arr[j++];
-        }
-    }
-    while (i <= mid)
-    {
-        temp[k++] = arr[i++];
-    }
-    while (j <= r)
-    {
-        temp[k++] = arr[j++];
-    }
-    for (c = l; c <= r; c++)
-        arr[c] = temp[c - l];
+	i = 0, j = 0, k = 0;
+
+	merged = malloc(sizeof(int) * (left_size + right_size));
+	printf("Merging...\n[left]: ");
+	print_array(left, left_size);
+	printf("[right]: ");
+	print_array(right, right_size);
+
+	while (i < left_size && j < right_size)
+		merged[k++] = (left[i] <= right[j]) ? left[i++] : right[j++];
+
+	while (i < left_size)
+		merged[k++] = left[i++];
+
+	while (j < right_size)
+		merged[k++] = right[j++];
+
+	for (i = 0; i < left_size + right_size; i++)
+		array[i] = merged[i];
+	free(merged);
+
+	printf("[Done]: ");
+	print_array(array, left_size + right_size);
 }
 
-void mergeSortFunc(int arr[], int l, int r);
-
 /**
- * merge_sort - wrapper function
- * @array: array 
- * @size: size 
- */
+ * merge_sort - sorts an array of integers
+ * @array: array
+ * @size: size
+ **/
 void merge_sort(int *array, size_t size)
 {
-    mergeSortFunc(array, 0, size - 1);
-}
+	size_t mid;
+	int *left, *right;
 
-/**
- * mergeSort - the main merge sort function
- * @arr: array 
- * @l: left
- * @r: right
- */
-void mergeSortFunc(int arr[], int l, int r)
-{
-    int mid;
-    if (l < r)
-    {
-        mid = l + (r - 1) / 2;
-        mergeSortFunc(arr, l, mid);
-        mergeSortFunc(arr, mid + 1, r);
-        merge(arr, l, r);
-    }
+	if (size < 2)
+		return;
+
+	mid = size / 2;
+	left = array;
+	right = array + mid;
+
+	merge_sort(left, mid);
+	merge_sort(right, size - mid);
+
+	merge(array, left, mid, right, size - mid);
 }
