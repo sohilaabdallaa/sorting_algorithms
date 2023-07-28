@@ -5,6 +5,12 @@
 void heap_sort(int *array, size_t size);
 void heapify(int *array, int n, int i, size_t size);
 
+/**
+ * heap_sort - heap sort
+ * @array: array
+ * @size: size
+ */
+
 void heap_sort(int *array, size_t size)
 {
 
@@ -23,6 +29,14 @@ void heap_sort(int *array, size_t size)
 		heapify(array, i, 0, size);
 	}
 }
+
+/**
+ * heapify - heapify func
+ * @array: array
+ * @n: size
+ * @i: largest
+ * @size: size
+ */
 
 void heapify(int *array, int n, int i, size_t size)
 {
