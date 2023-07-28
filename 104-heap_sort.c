@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "sort.h"
 
 void heap_sort(int *array, size_t size);
-void heapify(int *array, int n, int i);
+void heapify(int *array, int n, int i, size_t size);
 
 void heap_sort(int *array, size_t size)
 {
@@ -10,7 +11,7 @@ void heap_sort(int *array, size_t size)
 	int i;
 
 	for (i = size / 2 - 1; i >= 0; i--)
-		heapify(array, size, i);
+		heapify(array, size, i, size);
 
 	for (i = size - 1; i > 0; i--)
 	{
@@ -18,12 +19,12 @@ void heap_sort(int *array, size_t size)
 
 		array[0] = array[i];
 		array[i] = temp;
-
-		heapify(array, i, 0);
+		print_array(array, size);
+		heapify(array, i, 0, size);
 	}
 }
 
-void heapify(int *array, int n, int i)
+void heapify(int *array, int n, int i, size_t size)
 {
 	int largest = i;
 	int l = 2 * i + 1;
@@ -42,6 +43,7 @@ void heapify(int *array, int n, int i)
 		array[i] = array[largest];
 		array[largest] = temp;
 
-		heapify(array, n, largest);
+		print_array(array, size);
+		heapify(array, n, largest, size);
 	}
 }
